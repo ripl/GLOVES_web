@@ -1,0 +1,8 @@
+resource/
+tools/
+
+# Raw videos and retired synchronized outputs are kept locally only.
+media/videos/charger/*.mp4
+media/videos/charger_result_sync/old-*.mp4
+media/teaser_v3.png
+GLOVES_web.code-workspace

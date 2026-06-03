@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Flow-based Policy Adaptation without Policy Updates</title>
+    <meta
+      name="description"
+      content="Project page for GLOVES: Flow-based Policy Adaptation without Policy Updates."
+    />
+    <meta
+      name="citation_title"
+      content="Flow-based Policy Adaptation without Policy Updates"
+    />
+    <meta name="citation_author" content="Sun, Luzhe" />
+    <meta name="citation_author" content="Ji, Jingtian" />
+    <meta name="citation_author" content="Chen, Haoran" />
+    <meta name="citation_author" content="Zhou, Jiawei" />
+    <meta name="citation_author" content="Walter, Matthew R." />
+    <meta name="citation_pdf_url" content="resource/paper.pdf" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container hero">
+        <h1>
+          <span class="title-emoji" aria-hidden="true">🧤</span>
+          <span class="title-text"
+            >GLOVES: Flow-based Policy Adaptation without Policy Updates</span
+          >
+        </h1>
+
+        <div class="authors" aria-label="Authors">
+          <span>Luzhe Sun<sup>*</sup></span>
+          <span>Jingtian Ji<sup>*</sup></span>
+          <span>Haoran Chen</span>
+          <span>Jiawei Zhou</span>
+          <span>Matthew R. Walter</span>
+        </div>
+
+        <p class="affiliations">
+          Toyota Technological Institute at Chicago &nbsp;|&nbsp; Stony Brook
+          University
+        </p>
+        <p class="note"><sup>*</sup>Equal contribution</p>
+
+        <nav class="paper-links" aria-label="Paper links">
+          <a href="resource/paper.pdf">Paper</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="section teaser-section" aria-labelledby="teaser-title">
+        <div class="container">
+          <h2 id="teaser-title">Overview</h2>
+          <figure class="teaser">
+            <img
+              src="media/teaser_v3_cropped.png"
+              alt="Overview of flow-based action adaptation with GLOVES."
+            />
+          </figure>
+        </div>
+      </section>
+
+      <section class="section video-section" aria-labelledby="video-title">
+        <div class="container wide">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Real Robot: Charger Insertion</p>
+              <h2 id="video-title">Method Comparison</h2>
+            </div>
+            <div class="video-controls" aria-label="Video controls">
+              <button type="button" data-video-action="play">Play All</button>
+              <button type="button" data-video-action="pause">Pause All</button>
+            </div>
+          </div>
+
+          <div class="method-grid">
+            <article class="method-card">
+              <header>
+                <span class="method-index">01</span>
+                <div>
+                  <h3>VLA(Finetuned Flower)</h3>
+                  <p>Base VLA policy</p>
+                </div>
+              </header>
+              <div class="video-pair">
+                <figure>
+                  <video
+                    src="media/videos/charger_result_sync/01_cam_VLA_Finetuned_Flower_fail.mp4"
+                    autoplay
+                    controls
+                    muted
+                    playsinline
+                    preload="auto"
+                  ></video>
+                  <figcaption>Zoom-in view</figcaption>
+                </figure>
+                <figure>
+                  <video
+                    src="media/videos/charger_result_sync/01_phone_VLA_Finetuned_Flower_fail.mp4"
+                    autoplay
+                    controls
+                    muted
+                    playsinline
+                    preload="auto"
+                  ></video>
+                  <figcaption>Normal view</figcaption>
+                </figure>
+              </div>
+            </article>
+
+            <article class="method-card highlight">
+              <header>
+                <span class="method-index">02</span>
+                <div>
+                  <h3>VLA+FPAS</h3>
+                  <p>Flow-prior action sampling</p>
+                </div>
+              </header>
+              <div class="video-pair">
+                <figure>
+                  <video
+                    src="media/videos/charger_result_sync/02_cam_VLA_FPAS_success.mp4"
+                    autoplay
+                    controls
+                    muted
+                    playsinline
+                    preload="auto"
+                  ></video>
+                  <figcaption>Zoom-in view</figcaption>
+                </figure>
+                <figure>
+                  <video
+                    src="media/videos/charger_result_sync/02_phone_VLA_FPAS_success.mp4"
+                    autoplay
+                    controls
+                    muted
+                    playsinline
+                    preload="auto"
+                  ></video>
+                  <figcaption>Normal view</figcaption>
+                </figure>
+              </div>
+            </article>
+
+            <article class="method-card">
+              <header>
+                <span class="method-index">03</span>
+                <div>
+                  <h3>VLA+FEEG</h3>
+                  <p>Energy-guided flow editing</p>
+                </div>
+              </header>
+              <div class="video-pair">
+                <figure>
+                  <video
+                    src="media/videos/charger_result_sync/03_cam_VLA_FEEG_success.mp4"
+                    autoplay
+                    controls
+                    muted
+                    playsinline
+                    preload="auto"
+                  ></video>
+                  <figcaption>Zoom-in view</figcaption>
+                </figure>
+                <figure>
+                  <video
+                    src="media/videos/charger_result_sync/03_phone_VLA_FEEG_success.mp4"
+                    autoplay
+                    controls
+                    muted
+                    playsinline
+                    preload="auto"
+                  ></video>
+                  <figcaption>Normal view</figcaption>
+                </figure>
+              </div>
+            </article>
+
+            <article class="method-card highlight">
+              <header>
+                <span class="method-index">04</span>
+                <div>
+                  <h3>VLA+IFAE</h3>
+                  <p>Inversion-free editing</p>
+                </div>
+              </header>
+              <div class="video-pair">
+                <figure>
+                  <video
+                    src="media/videos/charger_result_sync/04_cam_VLA_IFAE_success.mp4"
+                    autoplay
+                    controls
+                    muted
+                    playsinline
+                    preload="auto"
+                  ></video>
+                  <figcaption>Zoom-in view</figcaption>
+                </figure>
+                <figure>
+                  <video
+                    src="media/videos/charger_result_sync/04_phone_VLA_IFAE_success.mp4"
+                    autoplay
+                    controls
+                    muted
+                    playsinline
+                    preload="auto"
+                  ></video>
+                  <figcaption>Normal view</figcaption>
+                </figure>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section abstract-section" aria-labelledby="abstract-title">
+        <div class="container narrow">
+          <h2 id="abstract-title">Abstract</h2>
+          <p>
+            Leveraging prior knowledge from pretrained policies, foundation
+            models, or human operators offers an efficient alternative to
+            learning robot skills from scratch. However, these agents often
+            provide actions that are suboptimal, noisy, or misaligned with
+            task-specific expert behavior. We propose GLOVES, a family of
+            flow-based adaptation methods that correct non-expert actions by
+            transporting them toward an expert action distribution. Rather than
+            replacing agentic control with full autonomy, GLOVES performs
+            selective action-level adaptation, improving task success while
+            preserving agent intent. The learned flow also provides a natural
+            in-distribution scoring mechanism through reverse flow evaluation.
+            We use this signal as an intervention gate: actions that appear
+            consistent with the expert distribution are passed through
+            unchanged, while anomalous or out-of-distribution (OOD) actions are
+            corrected. In this way, assistance is only provided when necessary.
+            GLOVES requires only limited expert supervision, using a small
+            number of demonstrations or reusable successful skill segments. By
+            learning local expert action patterns and stitching them during
+            execution, GLOVES provides a lightweight shared-control module for
+            robust action adaptation across tasks and environments.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>GLOVES: Flow-based Policy Adaptation without Policy Updates</p>
+      </div>
+    </footer>
+
+    <script src="scripts.js"></script>
+  </body>
+</html>
