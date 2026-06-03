@@ -1,8 +1,17 @@
 const videos = Array.from(document.querySelectorAll("video"));
 const actionButtons = document.querySelectorAll("[data-video-action]");
 
-function alignVideoStarts() {
-  videos.forEach((video) => {
+function videosForTarget(target) {
+  if (!target) {
+    return videos;
+  }
+
+  const scope = document.querySelector(`[data-video-scope="${target}"]`);
+  return scope ? Array.from(scope.querySelectorAll("video")) : [];
+}
+
+function alignVideoStarts(targetVideos = videos) {
+  targetVideos.forEach((video) => {
     video.muted = true;
 
     try {
@@ -13,26 +22,27 @@ function alignVideoStarts() {
   });
 }
 
-async function playAllVideos() {
-  alignVideoStarts();
-  await Promise.allSettled(videos.map((video) => video.play()));
+async function playAllVideos(targetVideos = videos) {
+  alignVideoStarts(targetVideos);
+  await Promise.allSettled(targetVideos.map((video) => video.play()));
 }
 
-function pauseAllVideos() {
-  videos.forEach((video) => video.pause());
+function pauseAllVideos(targetVideos = videos) {
+  targetVideos.forEach((video) => video.pause());
 }
 
 actionButtons.forEach((button) => {
   button.addEventListener("click", () => {
     const action = button.dataset.videoAction;
+    const targetVideos = videosForTarget(button.dataset.videoTarget);
 
     if (action === "play") {
-      playAllVideos();
+      playAllVideos(targetVideos);
       return;
     }
 
     if (action === "pause") {
-      pauseAllVideos();
+      pauseAllVideos(targetVideos);
     }
   });
 });

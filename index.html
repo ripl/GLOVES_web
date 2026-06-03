@@ -31,16 +31,29 @@
         </h1>
 
         <div class="authors" aria-label="Authors">
-          <span>Luzhe Sun<sup>*</sup></span>
-          <span>Jingtian Ji<sup>*</sup></span>
-          <span>Haoran Chen</span>
-          <span>Jiawei Zhou</span>
-          <span>Matthew R. Walter</span>
+          <span
+            ><a href="https://tllokn.github.io/">Luzhe Sun</a><sup>*1</sup></span
+          >
+          <span
+            ><a href="https://ttic.edu/ripl/people/">Jingtian Ji</a
+            ><sup>*1</sup></span
+          >
+          <span
+            ><a href="https://ttic.edu/ripl/people/">Haoran Chen</a
+            ><sup>1</sup></span
+          >
+          <span
+            ><a href="https://joezhouai.com/">Jiawei Zhou</a><sup>2</sup></span
+          >
+          <span
+            ><a href="https://home.ttic.edu/~mwalter/">Matthew R. Walter</a
+            ><sup>1</sup></span
+          >
         </div>
 
         <p class="affiliations">
-          Toyota Technological Institute at Chicago &nbsp;|&nbsp; Stony Brook
-          University
+          <sup>1</sup>Toyota Technological Institute at Chicago &nbsp;&nbsp;
+          <sup>2</sup>Stony Brook University
         </p>
         <p class="note"><sup>*</sup>Equal contribution</p>
 
@@ -67,16 +80,24 @@
         <div class="container wide">
           <div class="section-heading">
             <div>
-              <p class="eyebrow">Real Robot: Charger Insertion</p>
               <h2 id="video-title">Method Comparison</h2>
-            </div>
-            <div class="video-controls" aria-label="Video controls">
-              <button type="button" data-video-action="play">Play All</button>
-              <button type="button" data-video-action="pause">Pause All</button>
             </div>
           </div>
 
-          <div class="method-grid">
+          <div class="experiment" data-video-scope="charger">
+            <div class="experiment-heading">
+              <h3>Real Robot: Charger Insertion</h3>
+              <div class="video-controls" aria-label="Charger video controls">
+                <button type="button" data-video-action="play" data-video-target="charger">
+                  Play All
+                </button>
+                <button type="button" data-video-action="pause" data-video-target="charger">
+                  Pause All
+                </button>
+              </div>
+            </div>
+
+            <div class="method-grid">
             <article class="method-card">
               <header>
                 <span class="method-index">01</span>
@@ -212,6 +233,115 @@
                 </figure>
               </div>
             </article>
+            </div>
+          </div>
+
+          <div class="experiment" data-video-scope="cup">
+            <div class="experiment-heading">
+              <h3>Real Robot: Cup Serve</h3>
+              <div class="video-controls" aria-label="Cup video controls">
+                <button type="button" data-video-action="play" data-video-target="cup">
+                  Play All
+                </button>
+                <button type="button" data-video-action="pause" data-video-target="cup">
+                  Pause All
+                </button>
+              </div>
+            </div>
+
+            <div class="method-grid">
+            <article class="method-card">
+              <header>
+                <span class="method-index">01</span>
+                <div>
+                  <h3>VLA(Finetuned Flower)</h3>
+                  <p>Collision failure</p>
+                </div>
+              </header>
+              <div class="video-pair single-video">
+                <figure>
+                  <video
+                    src="media/videos/cup_result_sync/01_VLA_finetune_fail.mp4"
+                    autoplay
+                    controls
+                    muted
+                    playsinline
+                    preload="auto"
+                  ></video>
+                  <figcaption>Red: collision after 2.5s</figcaption>
+                </figure>
+              </div>
+            </article>
+
+            <article class="method-card highlight">
+              <header>
+                <span class="method-index">02</span>
+                <div>
+                  <h3>VLA+FPAS</h3>
+                  <p>Minor collision</p>
+                </div>
+              </header>
+              <div class="video-pair single-video">
+                <figure>
+                  <video
+                    src="media/videos/cup_result_sync/02_VLA_FPAS_success_with_collision.mp4"
+                    autoplay
+                    controls
+                    muted
+                    playsinline
+                    preload="auto"
+                  ></video>
+                  <figcaption>Yellow: minor collision after 2.5s</figcaption>
+                </figure>
+              </div>
+            </article>
+
+            <article class="method-card">
+              <header>
+                <span class="method-index">03</span>
+                <div>
+                  <h3>VLA+FEEG</h3>
+                  <p>Successful serving</p>
+                </div>
+              </header>
+              <div class="video-pair single-video">
+                <figure>
+                  <video
+                    src="media/videos/cup_result_sync/03_VLA_FEEG_success.mp4"
+                    autoplay
+                    controls
+                    muted
+                    playsinline
+                    preload="auto"
+                  ></video>
+                  <figcaption>Green: final success state</figcaption>
+                </figure>
+              </div>
+            </article>
+
+            <article class="method-card highlight">
+              <header>
+                <span class="method-index">04</span>
+                <div>
+                  <h3>VLA+IFAE</h3>
+                  <p>Successful serving</p>
+                </div>
+              </header>
+              <div class="video-pair single-video">
+                <figure>
+                  <video
+                    src="media/videos/cup_result_sync/04_VLA_IFAE_success.mp4"
+                    autoplay
+                    controls
+                    muted
+                    playsinline
+                    preload="auto"
+                  ></video>
+                  <figcaption>Green: final success state</figcaption>
+                </figure>
+              </div>
+            </article>
+            </div>
           </div>
         </div>
       </section>
