@@ -65,7 +65,7 @@
 
     <main>
       <section class="section teaser-section" aria-labelledby="teaser-title">
-        <div class="container">
+        <div class="container medium">
           <h2 id="teaser-title">Overview</h2>
           <figure class="teaser">
             <img
@@ -371,6 +371,170 @@
             execution, GLOVES provides a lightweight shared-control module for
             robust action adaptation across tasks and environments.
           </p>
+        </div>
+      </section>
+
+      <section class="section methods-section" aria-labelledby="methods-title">
+        <div class="container medium">
+          <h2 id="methods-title">Methods</h2>
+          <div class="method-animation-grid">
+            <article class="method-animation">
+              <h3>A. FPAS</h3>
+              <video
+                src="media/method/FPAS.mp4"
+                autoplay
+                controls
+                loop
+                muted
+                playsinline
+                preload="auto"
+              ></video>
+            </article>
+
+            <article class="method-animation">
+              <h3>B. FEEG</h3>
+              <video
+                src="media/method/FEEG.mp4"
+                autoplay
+                controls
+                loop
+                muted
+                playsinline
+                preload="auto"
+              ></video>
+            </article>
+
+            <article class="method-animation">
+              <h3>C. IFAE</h3>
+              <video
+                src="media/method/IFAE.mp4"
+                autoplay
+                controls
+                loop
+                muted
+                playsinline
+                preload="auto"
+              ></video>
+            </article>
+          </div>
+
+          <div class="interactive-results" aria-labelledby="results-title">
+            <div class="results-heading">
+              <div>
+                <h3 id="results-title">VLA + Assistive Policy</h3>
+                <p class="results-subtitle">Interactive Results</p>
+              </div>
+              <div class="result-tabs" role="tablist" aria-label="Result tasks">
+                <button
+                  type="button"
+                  class="active"
+                  data-chart-task="slalom"
+                  role="tab"
+                  aria-selected="true"
+                >
+                  Slalom
+                </button>
+                <button
+                  type="button"
+                  data-chart-task="can"
+                  role="tab"
+                  aria-selected="false"
+                >
+                  Can
+                </button>
+                <button
+                  type="button"
+                  data-chart-task="charger"
+                  role="tab"
+                  aria-selected="false"
+                >
+                  Charger
+                </button>
+                <button
+                  type="button"
+                  data-chart-task="cup"
+                  role="tab"
+                  aria-selected="false"
+                >
+                  Cup Serve
+                </button>
+              </div>
+            </div>
+
+            <div class="chart-panel">
+              <div class="chart-wrap">
+                <svg
+                  id="assistive-chart"
+                  class="assistive-chart"
+                  role="img"
+                  aria-labelledby="chart-title chart-description"
+                ></svg>
+              </div>
+              <div class="chart-details" aria-live="polite">
+                <h4 id="chart-title">Slalom</h4>
+                <p id="chart-description">Hover over a bar to inspect values.</p>
+                <div id="chart-selection" class="chart-selection"></div>
+                <div id="chart-legend" class="chart-legend"></div>
+                <p class="chart-note">† denotes OOD-gated variants.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="wrapper-results" aria-labelledby="wrapper-results-title">
+            <div class="results-heading">
+              <div>
+                <h3 id="wrapper-results-title">IL + Wrapper Agents</h3>
+                <p class="results-subtitle">Leaderboard</p>
+              </div>
+              <div class="leaderboard-controls">
+                <label>
+                  Task
+                  <select id="wrapper-task-filter">
+                    <option value="all">All tasks</option>
+                    <option value="Slalom">Slalom</option>
+                    <option value="Can">Can</option>
+                    <option value="Keypad">Keypad</option>
+                    <option value="Charger">Charger</option>
+                  </select>
+                </label>
+                <label>
+                  Agent
+                  <select id="wrapper-agent-filter">
+                    <option value="all">All agents</option>
+                    <option value="laggy">laggy</option>
+                    <option value="noised">noised</option>
+                    <option value="slow">slow</option>
+                    <option value="shift">shift</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+
+            <div id="wrapper-summary" class="leaderboard-summary"></div>
+            <div class="leaderboard-layout">
+              <div class="leaderboard-card">
+                <table class="leaderboard-table">
+                  <thead>
+                    <tr>
+                      <th>Method</th>
+                      <th>Top1</th>
+                      <th>Top2</th>
+                      <th>Top3</th>
+                      <th>Rank</th>
+                      <th>Success</th>
+                      <th>Gain</th>
+                    </tr>
+                  </thead>
+                  <tbody id="wrapper-leaderboard"></tbody>
+                </table>
+                <p class="leaderboard-note">† denotes OOD-gated variants.</p>
+              </div>
+              <div class="condition-card">
+                <h4>Condition Top 3</h4>
+                <div id="wrapper-conditions" class="condition-list"></div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </main>
