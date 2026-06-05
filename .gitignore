@@ -1,5 +1,8 @@
 resource/
 tools/
+storyboards/
+*.pdf
+.DS_Store
 
 # Raw videos and retired synchronized outputs are kept locally only.
 media/videos/charger/*.mp4

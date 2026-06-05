@@ -176,6 +176,7 @@ h3 {
 }
 
 .paper-links a,
+.paper-links .disabled-link,
 .video-controls button {
   min-height: 42px;
   padding: 8px 16px;
@@ -189,6 +190,13 @@ h3 {
     background 160ms ease,
     border-color 160ms ease,
     transform 160ms ease;
+}
+
+.paper-links .disabled-link {
+  border-color: var(--line-strong);
+  background: #f4f5f1;
+  color: var(--muted);
+  cursor: not-allowed;
 }
 
 .paper-links a:hover,
