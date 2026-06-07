@@ -1,13 +1,20 @@
 resource/
 tools/
 storyboards/
+scripts/
 *.pdf
 .DS_Store
+__pycache__/
+*.pyc
 
 # Raw videos and retired synchronized outputs are kept locally only.
-media/videos/charger/*.mp4
-media/videos/cup/*.mp4
+media/videos/charger/
+media/videos/cup/
+media/videos/simulation_showcase/
+media/videos/simulation_showcase_webm/manifest.json
 media/videos/charger_result_sync/old-*.mp4
 media/method/*.mov
 media/teaser_v3.png
 GLOVES_web.code-workspace
+
+Archive/

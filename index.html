@@ -77,17 +77,11 @@
         </div>
       </section>
 
-      <section class="section video-section" aria-labelledby="video-title">
-        <div class="container wide">
-          <div class="section-heading">
-            <div>
-              <h2 id="video-title">Method Comparison</h2>
-            </div>
-          </div>
-
+      <section class="section video-section" aria-labelledby="charger-title">
+        <div class="container medium">
           <div class="experiment" data-video-scope="charger">
             <div class="experiment-heading">
-              <h3>Real Robot: Charger Insertion</h3>
+              <h3 id="charger-title">Real Robot: Charger Insertion</h3>
               <div class="video-controls" aria-label="Charger video controls">
                 <button type="button" data-video-action="play" data-video-target="charger">
                   Play All
@@ -375,7 +369,7 @@
         </div>
       </section>
 
-      <section class="section methods-section" aria-labelledby="methods-title">
+      <section class="section methods-section" aria-labelledby="simulation-results-title">
         <div class="container medium">
           <h2 id="methods-title">Methods</h2>
           <div class="method-animation-grid">
@@ -419,66 +413,65 @@
             </article>
           </div>
 
-          <div class="interactive-results" aria-labelledby="results-title">
+          <div
+            class="simulation-results"
+            data-video-scope="simulation"
+            aria-labelledby="simulation-results-title"
+          >
             <div class="results-heading">
               <div>
-                <h3 id="results-title">VLA + Assistive Policy</h3>
-                <p class="results-subtitle">Interactive Results</p>
+                <h3 id="simulation-results-title">Simulation Rollouts</h3>
+                <p class="results-subtitle">Video Selector</p>
               </div>
-              <div class="result-tabs" role="tablist" aria-label="Result tasks">
+              <div class="video-controls" aria-label="Simulation video controls">
                 <button
                   type="button"
-                  class="active"
-                  data-chart-task="slalom"
-                  role="tab"
-                  aria-selected="true"
+                  data-video-action="play"
+                  data-video-target="simulation"
                 >
-                  Slalom
+                  Play Visible
                 </button>
                 <button
                   type="button"
-                  data-chart-task="can"
-                  role="tab"
-                  aria-selected="false"
+                  data-video-action="pause"
+                  data-video-target="simulation"
                 >
-                  Can
-                </button>
-                <button
-                  type="button"
-                  data-chart-task="charger"
-                  role="tab"
-                  aria-selected="false"
-                >
-                  Charger
-                </button>
-                <button
-                  type="button"
-                  data-chart-task="cup"
-                  role="tab"
-                  aria-selected="false"
-                >
-                  Cup Serve
+                  Pause Visible
                 </button>
               </div>
             </div>
 
-            <div class="chart-panel">
-              <div class="chart-wrap">
-                <svg
-                  id="assistive-chart"
-                  class="assistive-chart"
-                  role="img"
-                  aria-labelledby="chart-title chart-description"
-                ></svg>
+            <div class="simulation-panel">
+              <div class="simulation-selector-row">
+                <span>Task</span>
+                <div
+                  id="simulation-task-controls"
+                  class="simulation-button-row"
+                  role="radiogroup"
+                  aria-label="Simulation task"
+                ></div>
               </div>
-              <div class="chart-details" aria-live="polite">
-                <h4 id="chart-title">Slalom</h4>
-                <p id="chart-description">Hover over a bar to inspect values.</p>
-                <div id="chart-selection" class="chart-selection"></div>
-                <div id="chart-legend" class="chart-legend"></div>
-                <p class="chart-note">† denotes OOD-gated variants.</p>
+              <div class="simulation-selector-row">
+                <span>Base Policy</span>
+                <div
+                  id="simulation-base-controls"
+                  class="simulation-button-row"
+                  role="radiogroup"
+                  aria-label="Base policy"
+                ></div>
+              </div>
+              <div class="simulation-selector-row">
+                <span>Assistive Policy</span>
+                <div
+                  id="simulation-method-controls"
+                  class="simulation-button-row"
+                  aria-label="Assistive policies"
+                ></div>
               </div>
             </div>
+
+            <p id="simulation-status" class="simulation-status" aria-live="polite"></p>
+            <div id="simulation-grid" class="simulation-grid"></div>
           </div>
 
           <div class="wrapper-results" aria-labelledby="wrapper-results-title">
@@ -536,6 +529,68 @@
               </div>
             </div>
           </div>
+
+          <div class="interactive-results" aria-labelledby="results-title">
+            <div class="results-heading">
+              <div>
+                <h3 id="results-title">VLA + Assistive Policy</h3>
+                <p class="results-subtitle">Interactive Results</p>
+              </div>
+              <div class="result-tabs" role="tablist" aria-label="Result tasks">
+                <button
+                  type="button"
+                  class="active"
+                  data-chart-task="slalom"
+                  role="tab"
+                  aria-selected="true"
+                >
+                  Slalom
+                </button>
+                <button
+                  type="button"
+                  data-chart-task="can"
+                  role="tab"
+                  aria-selected="false"
+                >
+                  Can
+                </button>
+                <button
+                  type="button"
+                  data-chart-task="charger"
+                  role="tab"
+                  aria-selected="false"
+                >
+                  Real Robot: Charger
+                </button>
+                <button
+                  type="button"
+                  data-chart-task="cup"
+                  role="tab"
+                  aria-selected="false"
+                >
+                  Real Robot: Cup Serve
+                </button>
+              </div>
+            </div>
+
+            <div class="chart-panel">
+              <div class="chart-wrap">
+                <svg
+                  id="assistive-chart"
+                  class="assistive-chart"
+                  role="img"
+                  aria-labelledby="chart-title chart-description"
+                ></svg>
+              </div>
+              <div class="chart-details" aria-live="polite">
+                <h4 id="chart-title">Slalom</h4>
+                <p id="chart-description">Hover over a bar to inspect values.</p>
+                <div id="chart-selection" class="chart-selection"></div>
+                <div id="chart-legend" class="chart-legend"></div>
+                <p class="chart-note">† denotes OOD-gated variants.</p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </main>
@@ -546,6 +601,7 @@
       </div>
     </footer>
 
+    <script src="media/videos/simulation_showcase_webm/manifest.js"></script>
     <script src="scripts.js"></script>
   </body>
 </html>

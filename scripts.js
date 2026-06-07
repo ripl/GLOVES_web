@@ -1,16 +1,17 @@
-const videos = Array.from(document.querySelectorAll("video"));
-const actionButtons = document.querySelectorAll("[data-video-action]");
+function allVideos() {
+  return Array.from(document.querySelectorAll("video"));
+}
 
 function videosForTarget(target) {
   if (!target) {
-    return videos;
+    return allVideos();
   }
 
   const scope = document.querySelector(`[data-video-scope="${target}"]`);
   return scope ? Array.from(scope.querySelectorAll("video")) : [];
 }
 
-function alignVideoStarts(targetVideos = videos) {
+function alignVideoStarts(targetVideos = allVideos()) {
   targetVideos.forEach((video) => {
     video.muted = true;
 
@@ -22,29 +23,36 @@ function alignVideoStarts(targetVideos = videos) {
   });
 }
 
-async function playAllVideos(targetVideos = videos) {
+async function playAllVideos(targetVideos = allVideos()) {
   alignVideoStarts(targetVideos);
   await Promise.allSettled(targetVideos.map((video) => video.play()));
 }
 
-function pauseAllVideos(targetVideos = videos) {
+function pauseAllVideos(targetVideos = allVideos()) {
   targetVideos.forEach((video) => video.pause());
 }
 
-actionButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    const action = button.dataset.videoAction;
-    const targetVideos = videosForTarget(button.dataset.videoTarget);
+document.addEventListener("click", (event) => {
+  if (!(event.target instanceof Element)) {
+    return;
+  }
 
-    if (action === "play") {
-      playAllVideos(targetVideos);
-      return;
-    }
+  const button = event.target.closest("[data-video-action]");
+  if (!button) {
+    return;
+  }
 
-    if (action === "pause") {
-      pauseAllVideos(targetVideos);
-    }
-  });
+  const action = button.dataset.videoAction;
+  const targetVideos = videosForTarget(button.dataset.videoTarget);
+
+  if (action === "play") {
+    playAllVideos(targetVideos);
+    return;
+  }
+
+  if (action === "pause") {
+    pauseAllVideos(targetVideos);
+  }
 });
 
 const BAR_CHART_TASKS = {
@@ -85,7 +93,7 @@ const BAR_CHART_TASKS = {
     ],
   },
   charger: {
-    title: "Real Charger",
+    title: "Real Robot: Charger",
     metric: "Success Count",
     unit: "",
     yMax: 45,
@@ -100,7 +108,7 @@ const BAR_CHART_TASKS = {
     ],
   },
   cup: {
-    title: "Cup Serve",
+    title: "Real Robot: Cup Serve",
     metric: "Success Count",
     unit: "",
     yMax: 25,
@@ -503,6 +511,331 @@ function initWrapperLeaderboard() {
 
 initWrapperLeaderboard();
 
+const SIMULATION_DEFAULT_METHODS = ["fpas", "feeg", "ifae"];
+
+const simulationState = {
+  task: "slalom",
+  base: "vla",
+  methods: new Set(SIMULATION_DEFAULT_METHODS),
+  activeVideos: new Map(),
+};
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}
+
+function simulationData() {
+  return window.SIMULATION_SHOWCASE;
+}
+
+function simulationTaskEntries(taskId = simulationState.task) {
+  return simulationData()?.entries?.[taskId] || {};
+}
+
+function simulationBaseEntry(taskId = simulationState.task, baseId = simulationState.base) {
+  return simulationTaskEntries(taskId)[baseId] || null;
+}
+
+function simulationLabel(list, id) {
+  return list.find((entry) => entry.id === id)?.label || id;
+}
+
+function availableSimulationBases(taskId = simulationState.task) {
+  const entries = simulationTaskEntries(taskId);
+  return (simulationData()?.bases || []).filter((base) => Boolean(entries[base.id]));
+}
+
+function isSimulationMethodAvailable(methodId) {
+  const entry = simulationBaseEntry();
+  return Boolean(entry?.[methodId]?.videos?.length);
+}
+
+function normalizeSimulationSelection() {
+  const data = simulationData();
+  if (!data) {
+    return;
+  }
+
+  const taskIds = data.tasks.map((task) => task.id);
+  if (!taskIds.includes(simulationState.task)) {
+    simulationState.task = taskIds[0];
+  }
+
+  const bases = availableSimulationBases();
+  if (!bases.some((base) => base.id === simulationState.base)) {
+    simulationState.base = bases[0]?.id || "";
+  }
+
+  const availableMethods = data.methods
+    .map((method) => method.id)
+    .filter((methodId) => isSimulationMethodAvailable(methodId));
+  simulationState.methods = new Set(
+    Array.from(simulationState.methods).filter((methodId) => availableMethods.includes(methodId))
+  );
+
+  if (!simulationState.methods.size) {
+    SIMULATION_DEFAULT_METHODS.forEach((methodId) => {
+      if (availableMethods.includes(methodId)) {
+        simulationState.methods.add(methodId);
+      }
+    });
+  }
+}
+
+function renderSimulationButton(container, item, options) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.textContent = item.label;
+  button.disabled = Boolean(options.disabled);
+  if (options.multi) {
+    button.setAttribute("aria-pressed", String(options.active));
+  } else {
+    button.setAttribute("role", "radio");
+    button.setAttribute("aria-checked", String(options.active));
+  }
+  button.addEventListener("click", options.onClick);
+  container.appendChild(button);
+}
+
+function renderSimulationControls() {
+  const data = simulationData();
+  const taskControls = document.getElementById("simulation-task-controls");
+  const baseControls = document.getElementById("simulation-base-controls");
+  const methodControls = document.getElementById("simulation-method-controls");
+  if (!data || !taskControls || !baseControls || !methodControls) {
+    return;
+  }
+
+  taskControls.innerHTML = "";
+  data.tasks.forEach((task) => {
+    renderSimulationButton(taskControls, task, {
+      active: task.id === simulationState.task,
+      onClick: () => {
+        simulationState.task = task.id;
+        normalizeSimulationSelection();
+        renderSimulationShowcase();
+      },
+    });
+  });
+
+  baseControls.innerHTML = "";
+  data.bases.forEach((base) => {
+    const disabled = !simulationTaskEntries()[base.id];
+    renderSimulationButton(baseControls, base, {
+      active: base.id === simulationState.base,
+      disabled,
+      onClick: () => {
+        if (disabled) return;
+        simulationState.base = base.id;
+        normalizeSimulationSelection();
+        renderSimulationShowcase();
+      },
+    });
+  });
+
+  methodControls.innerHTML = "";
+  data.methods.forEach((method) => {
+    const disabled = !isSimulationMethodAvailable(method.id);
+    renderSimulationButton(methodControls, method, {
+      active: simulationState.methods.has(method.id),
+      disabled,
+      multi: true,
+      onClick: () => {
+        if (disabled) return;
+        if (simulationState.methods.has(method.id)) {
+          simulationState.methods.delete(method.id);
+        } else {
+          simulationState.methods.add(method.id);
+        }
+        renderSimulationShowcase();
+      },
+    });
+  });
+}
+
+function simulationOutcomeSummary(videos) {
+  const successes = videos.filter((video) => video.outcome === "success").length;
+  const failures = videos.length - successes;
+  if (!failures) {
+    return `${successes} success videos`;
+  }
+  if (!successes) {
+    return `${failures} failure videos`;
+  }
+  return `${successes} success, ${failures} failure`;
+}
+
+function simulationCategoryHtml(category) {
+  const activeIndex = Math.min(
+    simulationState.activeVideos.get(category.id) || 0,
+    category.videos.length - 1
+  );
+  const video = category.videos[activeIndex];
+
+  return `
+    <article class="simulation-category" data-simulation-category="${escapeHtml(category.id)}">
+      <header>
+        <h4>${escapeHtml(category.label)}</h4>
+        <p>${escapeHtml(simulationOutcomeSummary(category.videos))}</p>
+      </header>
+      <div class="simulation-canvas" data-simulation-outcome="${escapeHtml(video.outcome)}">
+        <video
+          src="${escapeHtml(video.src)}"
+          controls
+          muted
+          playsinline
+          preload="metadata"
+        ></video>
+      </div>
+      <div class="simulation-browser">
+        <button type="button" data-simulation-step="-1" aria-label="Previous rollout">‹</button>
+        <span>${activeIndex + 1} / ${category.videos.length}</span>
+        <button type="button" data-simulation-step="1" aria-label="Next rollout">›</button>
+      </div>
+      <div class="simulation-slide-buttons" aria-label="${escapeHtml(category.label)} rollouts">
+        ${category.videos
+          .map(
+            (_, index) => `
+              <button
+                type="button"
+                data-simulation-index="${index}"
+                aria-label="Rollout ${index + 1}"
+                aria-pressed="${index === activeIndex ? "true" : "false"}"
+              >
+                ${index + 1}
+              </button>
+            `
+          )
+          .join("")}
+      </div>
+      <p class="simulation-caption">${escapeHtml(video.caption)}</p>
+    </article>
+  `;
+}
+
+function renderSimulationShowcase() {
+  const data = simulationData();
+  const grid = document.getElementById("simulation-grid");
+  const status = document.getElementById("simulation-status");
+  if (!grid || !status) {
+    return;
+  }
+
+  if (!data) {
+    status.textContent = "Simulation manifest is not available.";
+    grid.innerHTML = `<div class="simulation-empty">No simulation videos are available.</div>`;
+    return;
+  }
+
+  normalizeSimulationSelection();
+  renderSimulationControls();
+
+  const entry = simulationBaseEntry();
+  if (!entry?.base?.videos?.length) {
+    status.textContent = "This task/base-policy combination is not available.";
+    grid.innerHTML = `<div class="simulation-empty">Choose another task or base policy.</div>`;
+    return;
+  }
+
+  const categories = [
+    {
+      id: "base",
+      label: simulationLabel(data.bases, simulationState.base),
+      videos: entry.base.videos,
+    },
+  ];
+
+  data.methods.forEach((method) => {
+    if (!simulationState.methods.has(method.id) || !entry[method.id]) {
+      return;
+    }
+    categories.push({
+      id: method.id,
+      label: method.label,
+      videos: entry[method.id].videos,
+    });
+  });
+
+  const totalVideos = categories.reduce((total, category) => total + category.videos.length, 0);
+  const missingOverlays = categories
+    .flatMap((category) => category.videos)
+    .filter((video) => video.overlayMissing).length;
+  const overlayNote = missingOverlays
+    ? ` ${missingOverlays} Slalom base-policy videos use raw footage while overlay is pending.`
+    : "";
+  status.textContent = `${simulationLabel(data.tasks, simulationState.task)} / ${simulationLabel(
+    data.bases,
+    simulationState.base
+  )}: ${categories.length} categories, ${totalVideos} videos.${overlayNote}`;
+  grid.innerHTML = categories.map(simulationCategoryHtml).join("");
+  bindSimulationVideoFrames();
+}
+
+function initSimulationShowcase() {
+  const grid = document.getElementById("simulation-grid");
+  if (!grid) {
+    return;
+  }
+  renderSimulationShowcase();
+}
+
+initSimulationShowcase();
+
+function bindSimulationVideoFrames() {
+  document.querySelectorAll(".simulation-canvas video").forEach((video) => {
+    const canvas = video.closest(".simulation-canvas");
+    if (!canvas) {
+      return;
+    }
+
+    video.addEventListener("play", () => {
+      canvas.classList.remove("is-ended");
+    });
+    video.addEventListener("seeking", () => {
+      canvas.classList.remove("is-ended");
+    });
+    video.addEventListener("ended", () => {
+      canvas.classList.add("is-ended");
+    });
+  });
+}
+
+document.addEventListener("click", (event) => {
+  if (!(event.target instanceof Element)) {
+    return;
+  }
+
+  const categoryEl = event.target.closest("[data-simulation-category]");
+  if (!categoryEl) {
+    return;
+  }
+
+  const categoryId = categoryEl.dataset.simulationCategory;
+  const currentIndex = simulationState.activeVideos.get(categoryId) || 0;
+  const slideButton = event.target.closest("[data-simulation-index]");
+  if (slideButton) {
+    simulationState.activeVideos.set(categoryId, Number(slideButton.dataset.simulationIndex));
+    renderSimulationShowcase();
+    return;
+  }
+
+  const stepButton = event.target.closest("[data-simulation-step]");
+  if (stepButton) {
+    const videos = simulationBaseEntry()?.[categoryId]?.videos || [];
+    if (!videos.length) {
+      return;
+    }
+    const nextIndex =
+      (currentIndex + Number(stepButton.dataset.simulationStep) + videos.length) % videos.length;
+    simulationState.activeVideos.set(categoryId, nextIndex);
+    renderSimulationShowcase();
+  }
+});
+
 requestAnimationFrame(() => {
-  playAllVideos();
+  playAllVideos(Array.from(document.querySelectorAll("video[autoplay]")));
 });
