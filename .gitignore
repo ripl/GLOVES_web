@@ -3,6 +3,8 @@ tools/
 storyboards/
 scripts/
 *.pdf
+!doc/
+!doc/poster.pdf
 .DS_Store
 __pycache__/
 *.pyc
