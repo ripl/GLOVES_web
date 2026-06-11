@@ -18,6 +18,18 @@
     <meta name="citation_author" content="Zhou, Jiawei" />
     <meta name="citation_author" content="Walter, Matthew R." />
     <meta name="citation_pdf_url" content="https://arxiv.org/abs/2606.06461v1" />
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [["\\(", "\\)"]],
+          displayMath: [["\\[", "\\]"]],
+        },
+      };
+    </script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"
+    ></script>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -370,48 +382,85 @@
         </div>
       </section>
 
-      <section class="section methods-section" aria-labelledby="simulation-results-title">
+      <section class="section methods-section" aria-labelledby="methods-title">
         <div class="container medium">
           <h2 id="methods-title">Methods</h2>
-          <div class="method-animation-grid">
-            <article class="method-animation">
-              <h3>A. FPAS</h3>
-              <video
-                src="media/method/FPAS.mp4"
-                autoplay
-                controls
-                loop
-                muted
-                playsinline
-                preload="auto"
-              ></video>
-            </article>
+          <div class="ood-detection" aria-labelledby="ood-title">
+            <div class="ood-copy">
+              <h3 id="ood-title" class="method-subsection-title">OOD Detection</h3>
+              <p>
+                GLOVES reuses the expert flow as an intervention gate. For a
+                proposed action chunk \(x\) under context \(c\), we run the
+                learned flow backward and use the negative prior log-likelihood
+                as a nonconformity score:
+                \[
+                  \hat z(x,c)=F_\theta^{-1}(x;c),\qquad
+                  s(x,c)\propto \|\hat z(x,c)\|_2^2.
+                \]
+                Given a calibration set of \(n\) expert action-context pairs
+                \(\mathcal{D}_{\mathrm{cal}}=\{(x_i,c_i)\}_{i=1}^n\), we compute
+                \(s_i=s(x_i,c_i)\). Conformal prediction then gives
+                \[
+                  p(x,c)=
+                  \frac{1+\sum_{i=1}^{n}\mathbf{1}\{s_i\ge s(x,c)\}}{n+1}.
+                \]
+                We execute chunks with \(p(x,c)>\alpha\) unchanged and adapt the
+                rest.
+              </p>
+            </div>
+            <video
+              src="media/method/ood-detection.webm"
+              autoplay
+              controls
+              loop
+              muted
+              playsinline
+              preload="metadata"
+            ></video>
+          </div>
 
-            <article class="method-animation">
-              <h3>B. FEEG</h3>
-              <video
-                src="media/method/FEEG.mp4"
-                autoplay
-                controls
-                loop
-                muted
-                playsinline
-                preload="auto"
-              ></video>
-            </article>
+          <div class="gloves-methods" aria-labelledby="gloves-title">
+            <h3 id="gloves-title" class="method-subsection-title">GLOVES</h3>
+            <div class="method-animation-grid">
+              <article class="method-animation">
+                <h4>(a) FPAS</h4>
+                <video
+                  src="media/method/FPAS.mp4"
+                  autoplay
+                  controls
+                  loop
+                  muted
+                  playsinline
+                  preload="auto"
+                ></video>
+              </article>
 
-            <article class="method-animation">
-              <h3>C. IFAE</h3>
-              <video
-                src="media/method/IFAE.mp4"
-                autoplay
-                controls
-                loop
-                muted
-                playsinline
-                preload="auto"
-              ></video>
-            </article>
+              <article class="method-animation">
+                <h4>(b) FEEG</h4>
+                <video
+                  src="media/method/FEEG.mp4"
+                  autoplay
+                  controls
+                  loop
+                  muted
+                  playsinline
+                  preload="auto"
+                ></video>
+              </article>
+
+              <article class="method-animation">
+                <h4>(c) IFAE</h4>
+                <video
+                  src="media/method/IFAE.mp4"
+                  autoplay
+                  controls
+                  loop
+                  muted
+                  playsinline
+                  preload="auto"
+                ></video>
+              </article>
+            </div>
           </div>
 
           <div
